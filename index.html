@@ -117,14 +117,39 @@
   .section-toggle { font-size: 12px; color: var(--blue); cursor: pointer; border: none; background: none; padding: 0; display: flex; align-items: center; gap: 4px; }
   .section-toggle:hover { text-decoration: underline; }
 
+  .tab-nav { background: var(--bg); border-bottom: 0.5px solid var(--border); display: flex; gap: 0; padding: 0 2rem; }
+  .tab-btn { font-size: 13px; padding: 12px 18px; cursor: pointer; color: var(--text2); border: none; background: none; border-bottom: 2px solid transparent; margin-bottom: -1px; display: flex; align-items: center; gap: 6px; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--text); border-bottom-color: var(--blue); font-weight: 500; }
+
+  .meth-section { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.25rem; }
+  .meth-section h2 { font-size: 15px; font-weight: 500; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
+  .meth-section p { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 0.75rem; }
+  .meth-section p:last-child { margin-bottom: 0; }
+
+  .rubric-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 0.75rem; }
+  .rubric-table th { text-align: left; padding: 8px 12px; font-weight: 500; font-size: 11px; color: var(--text2); border-bottom: 0.5px solid var(--border); background: var(--bg2); }
+  .rubric-table td { padding: 9px 12px; border-bottom: 0.5px solid var(--border); vertical-align: top; line-height: 1.5; font-size: 12px; color: var(--text2); }
+  .rubric-table tr:last-child td { border-bottom: none; }
+  .rubric-table td:first-child { font-weight: 500; white-space: nowrap; }
+  .score-band { display: inline-flex; align-items: center; gap: 6px; }
+  .score-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  .limitations-list { margin: 0.5rem 0 0 0; padding: 0; list-style: none; }
+  .limitations-list li { font-size: 13px; color: var(--text2); line-height: 1.6; padding: 6px 0; border-bottom: 0.5px solid var(--border); display: flex; gap: 8px; }
+  .limitations-list li:last-child { border-bottom: none; }
+  .lim-label { font-weight: 500; color: var(--text); min-width: 120px; }
+
   .footer { text-align: center; padding: 2rem; font-size: 11px; color: var(--text3); border-top: 0.5px solid var(--border); margin-top: 1rem; }
   .no-results { text-align: center; padding: 3rem; color: var(--text2); font-size: 14px; background: var(--bg); border-radius: var(--radius-lg); }
 
   @media (max-width: 600px) {
     .page-header { padding: 1rem; }
+    .tab-nav { padding: 0 1rem; }
     .main { padding: 1rem; }
     .crit-grid { grid-template-columns: 1fr; }
     .detail-total { font-size: 30px; }
+    .lim-label { min-width: 90px; }
   }
 </style>
 </head>
@@ -140,7 +165,18 @@
   </div>
 </header>
 
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('locations')" id="tab-locations">
+    <i class="ti ti-map-pin" style="font-size:14px"></i> Locations
+  </button>
+  <button class="tab-btn" onclick="switchTab('methodology')" id="tab-methodology">
+    <i class="ti ti-info-circle" style="font-size:14px"></i> Methodology
+  </button>
+</nav>
+
 <div class="main">
+
+<div id="page-locations">
 
   <!-- Filters -->
   <div class="filters">
@@ -208,8 +244,103 @@
     <div id="changelogEntries"></div>
   </div>
 
-  <!-- References -->
-  <div class="references">
+</div><!-- end page-locations -->
+
+<!-- Methodology tab -->
+<div id="page-methodology" style="display:none">
+
+  <div class="meth-section">
+    <h2><i class="ti ti-info-circle" style="font-size:16px"></i> Overview</h2>
+    <p>This dashboard helps identify the most suitable cities globally to host a 200-person international conference, evaluated across five criteria that matter most for an internationally diverse, inclusive gathering. Each criterion is scored out of 10, giving a maximum total of 50.</p>
+    <p>Scores are synthesised estimates produced by reviewing multiple public indices and reports listed in the references section below. They represent a directional assessment — useful for shortlisting — rather than a precise measurement. Cities were selected to ensure meaningful coverage across all 8 Organization Grants regions, with a bias toward cities that have viable conference infrastructure for groups of 150–250.</p>
+    <p>Scores should be reviewed and updated at least once a year, particularly for the Safety and Inclusivity criteria, which can change rapidly following elections, new legislation, or political events.</p>
+  </div>
+
+  <div class="meth-section">
+    <h2><i class="ti ti-ruler" style="font-size:16px"></i> Scoring rubric</h2>
+    <p>Each of the five criteria is scored on a 1–10 scale. The table below defines what each band means for each criterion.</p>
+    <div style="overflow-x:auto;margin-top:1rem">
+    <table class="rubric-table">
+      <thead>
+        <tr>
+          <th style="width:90px">Band</th>
+          <th>Safety & Stability</th>
+          <th>Visa Ease</th>
+          <th>Inclusivity</th>
+          <th>Affordability</th>
+          <th>Connectivity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="score-band"><span class="score-dot" style="background:#639922"></span> 9–10</span></td>
+          <td>Stable democracy, very low crime, no conflict proximity, Level 1 travel advisories. Consistent across GPI, Freedom House, and OSAC.</td>
+          <td>Visa-free or on-arrival for 80%+ of nationalities including African and South Asian passports. E-visa widely available. Simple, fast process.</td>
+          <td>Strong legal LGBT protections (marriage or civil union), active enforcement, welcoming social climate. High scores on ILGA World and CIVICUS Monitor.</td>
+          <td>Very affordable. Daily delegate costs typically under $150 USD. Numbeo CoL index below 45.</td>
+          <td>Major international hub with direct connections to Africa, Asia, Europe, and the Americas. OAG top-30 connected airport.</td>
+        </tr>
+        <tr>
+          <td><span class="score-band"><span class="score-dot" style="background:#378ADD"></span> 7–8</span></td>
+          <td>Generally stable, minor or localised crime concerns, no active conflict. Level 1–2 advisories. Good BTI governance scores.</td>
+          <td>Visa-free for most Western passports; some African/South Asian passports require advance visa but process is accessible.</td>
+          <td>Legal protections exist (decriminalisation, some anti-discrimination law) but social climate mixed. No active persecution.</td>
+          <td>Moderate costs. Delegate costs $150–250/day. Numbeo CoL 45–60.</td>
+          <td>Well-connected regional hub with strong links across one or two continents. Some gaps in direct routes.</td>
+        </tr>
+        <tr>
+          <td><span class="score-band"><span class="score-dot" style="background:#BA7517"></span> 4–6</span></td>
+          <td>Moderate risk. Elevated crime, recent political unrest, or nearby regional conflict. Level 2 advisories. Requires careful planning.</td>
+          <td>Visa required in advance for a significant proportion of attendees. Process workable but time-consuming.</td>
+          <td>LGBT status legally ambiguous or technically criminalised but rarely enforced. Conservative social climate. CIVICUS: Obstructed.</td>
+          <td>Mid-range costs. Delegate costs $250–400/day. Numbeo CoL 60–75.</td>
+          <td>Some international connectivity but notable gaps. Many attendees require 1–2 connections.</td>
+        </tr>
+        <tr>
+          <td><span class="score-band"><span class="score-dot" style="background:#E24B4A"></span> 1–3</span></td>
+          <td>Active conflict, high crime, significant instability, or Level 3–4 advisories. ACLED flags active violence. Not recommended.</td>
+          <td>Visa required for most attendees with complex or unpredictable approval. Some nationalities face outright restrictions.</td>
+          <td>LGBT criminalised with active enforcement. Severe restrictions on civic freedoms. CIVICUS: Repressed or Closed.</td>
+          <td>Very expensive. Delegate costs above $400/day. High venue, hotel, and F&B costs.</td>
+          <td>Limited international connectivity. No direct routes to major source regions. Multiple connections required from most origins.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="meth-section">
+    <h2><i class="ti ti-scale" style="font-size:16px"></i> Weighting</h2>
+    <p>All five criteria are weighted equally at 10 points each (total: 50). This reflects a deliberate decision that no single criterion should override the others — a city that scores perfectly on connectivity but fails on inclusivity or safety is not a suitable host.</p>
+    <p>Teams reviewing specific shortlisted cities may wish to apply their own weighting based on attendee composition, budget constraints, or organisational priorities. The raw per-criterion scores are visible in each city's detail panel for this purpose.</p>
+  </div>
+
+  <div class="meth-section">
+    <h2><i class="ti ti-award" style="font-size:16px"></i> Overall rating bands</h2>
+    <table class="rubric-table">
+      <thead><tr><th style="width:90px">Total score</th><th style="width:160px">Rating</th><th>Interpretation</th></tr></thead>
+      <tbody>
+        <tr><td>45–50</td><td><span class="badge badge-great">Highly recommended</span></td><td>Strong across all five criteria. Suitable for a globally diverse 200-person conference with minimal caveats.</td></tr>
+        <tr><td>38–44</td><td><span class="badge badge-good">Recommended</span></td><td>Good overall with one or two areas requiring attention. Worth shortlisting with eyes open to the lower-scoring criteria.</td></tr>
+        <tr><td>30–37</td><td><span class="badge badge-fair">Fair</span></td><td>Notable trade-offs in one or more criteria. May be appropriate for regional gatherings or where budget/connectivity constraints apply.</td></tr>
+        <tr><td>Below 30</td><td><span class="badge badge-poor">Limitations</span></td><td>Significant concerns in one or more criteria affecting safety, accessibility, or inclusivity. Not recommended without further due diligence.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="meth-section">
+    <h2><i class="ti ti-alert-triangle" style="font-size:16px"></i> Known limitations</h2>
+    <ul class="limitations-list">
+      <li><span class="lim-label">Visa scores</span> Weighted toward accessibility for African and South Asian passport holders, not just Western ones. A city that is visa-free for EU/US nationals but requires advance visas for Nigerian or Bangladeshi nationals scores lower than its headline Henley ranking suggests.</li>
+      <li><span class="lim-label">Inclusivity</span> Legal status (ILGA World) is easier to quantify than social climate, which relies on HRW, CIVICUS, and qualitative assessment. A country may have no criminalisation law but still present a hostile social environment — the score attempts to capture both.</li>
+      <li><span class="lim-label">Affordability</span> Based on general cost-of-living data (Numbeo) rather than MICE-specific pricing. Actual conference costs (venue hire, AV, catering per head, block hotel rates) can vary significantly and should be verified for any shortlisted city.</li>
+      <li><span class="lim-label">Real-time stability</span> Safety scores draw on annual indices (GPI, Freedom House, BTI) which may lag fast-moving situations. ACLED is used as a real-time supplement but scores are still point-in-time. Countries can deteriorate faster than an annual update cycle captures.</li>
+      <li><span class="lim-label">City vs country</span> Some criteria vary significantly within a country. Scores reflect the specific city listed, not the national average. Cape Town and Johannesburg have different safety profiles; Delhi and Mumbai have different cost profiles.</li>
+      <li><span class="lim-label">Infrastructure</span> All cities listed are assumed to have at least one venue capable of hosting 150–250 people with standard AV and catering. This has been verified at a high level but specific venue availability, dates, and pricing require direct confirmation.</li>
+    </ul>
+  </div>
+
+  <div class="meth-section">
     <h2><i class="ti ti-books" style="font-size:16px"></i> Data references</h2>
     <div class="ref-section">
       <h3>Safety & Stability</h3>
@@ -218,21 +349,29 @@
       <div class="ref-item">· <a href="https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories.html/" target="_blank">US State Dept Travel Advisories</a> — travel.state.gov — 4-tier country ratings</div>
       <div class="ref-item">· <a href="https://www.gov.uk/foreign-travel-advice" target="_blank">UK FCDO Travel Advice</a> — gov.uk — Country-by-country advisories</div>
       <div class="ref-item">· <a href="https://www.numbeo.com/crime/" target="_blank">Numbeo Crime Index</a> — numbeo.com — City-level crowdsourced crime data</div>
+      <div class="ref-item">· <a href="https://freedomhouse.org/report/freedom-world" target="_blank">Freedom House — Freedom in the World</a> — freedomhouse.org — Rates countries Free, Partly Free, or Not Free based on political rights and civil liberties</div>
+      <div class="ref-item">· <a href="https://acleddata.com" target="_blank">ACLED — Armed Conflict Location & Event Data</a> — acleddata.com — Real-time geospatial data on conflicts, protests and political violence</div>
+      <div class="ref-item">· <a href="https://worldjusticeproject.org/rule-of-law-index/" target="_blank">World Justice Project — Rule of Law Index</a> — worldjusticeproject.org — Evaluates government accountability, civil justice and fundamental rights</div>
+      <div class="ref-item">· <a href="https://rsf.org/en/ranking" target="_blank">Reporters Without Borders — Press Freedom Index</a> — rsf.org — Ranks countries by media independence and journalist safety</div>
+      <div class="ref-item">· <a href="https://www.amnesty.org/en/countries/" target="_blank">Amnesty International — Country Reports</a> — amnesty.org — Detailed country-by-country human rights analysis</div>
+      <div class="ref-item">· <a href="https://www.osac.gov/Country/Reports" target="_blank">OSAC — Overseas Security Advisory Council</a> — osac.gov — US State Dept annual Crime and Safety Reports</div>
+      <div class="ref-item">· <a href="https://bti-project.org/en/index/" target="_blank">Bertelsmann Transformation Index (BTI)</a> — bti-project.org — Governance and democracy performance, particularly useful for CEECA and Africa</div>
     </div>
     <div class="ref-section">
       <h3>Visa Ease</h3>
       <div class="ref-item">· <a href="https://www.henleypassportindex.com" target="_blank">Henley Passport Index</a> — henleypassportindex.com — Passport strength by visa-free access</div>
       <div class="ref-item">· <a href="https://www.iatatravelcentre.com" target="_blank">IATA Travel Centre</a> — iatatravelcentre.com — Operational visa requirements by nationality</div>
       <div class="ref-item">· <a href="https://www.passportindex.org" target="_blank">Passport Index</a> — passportindex.org — Alternative passport ranking tool</div>
-      <div class="ref-item">· <a href="https://visaguide.world" target="_blank">VisaGuide.World</a> — visaguide.world — E-visa and visa-on-arrival specifics</div>
+      <div class="ref-item">· <a href="https://visaguide.world" target="_blank">VisaGuide.World</a> — visaguide.world — E-visa and visa-on-arrival specifics by country pair</div>
     </div>
     <div class="ref-section">
-      <h3>Inclusivity (LGBT + treatment of Africans)</h3>
+      <h3>Inclusivity</h3>
       <div class="ref-item">· <a href="https://ilga.org/state-sponsored-homophobia-report/" target="_blank">ILGA World — State-Sponsored Homophobia Report</a> — ilga.org — Annual legal audit by country</div>
       <div class="ref-item">· <a href="https://ilga.org/rainbowmap" target="_blank">ILGA Rainbow Map</a> — ilga.org — Visual summary of global LGBT legal protections</div>
       <div class="ref-item">· <a href="https://www.equaldex.com" target="_blank">Equaldex</a> — equaldex.com — Continuously updated LGBT rights index</div>
       <div class="ref-item">· <a href="https://www.hrw.org/world-report" target="_blank">Human Rights Watch World Report</a> — hrw.org — Annual country human rights assessments</div>
       <div class="ref-item">· <a href="https://www.afrobarometer.org" target="_blank">Afrobarometer</a> — afrobarometer.org — Attitudes and social data across Africa</div>
+      <div class="ref-item">· <a href="https://monitor.civicus.org" target="_blank">CIVICUS Monitor</a> — monitor.civicus.org — Tracks restrictions on freedom of association, assembly and expression; rates countries Open through Closed</div>
     </div>
     <div class="ref-section">
       <h3>Affordability</h3>
@@ -249,18 +388,24 @@
     </div>
   </div>
 
+</div><!-- end page-methodology -->
+
   <footer class="footer">
-    Global Conference Location Finder · Scores are synthesised estimates based on the data sources above · Regions follow <a href="https://meta.Organization.org/wiki/Grants:Regions" target="_blank" style="color:var(--blue)">Organization Grants Regions</a> · For a 200-person international conference
+    Global Conference Location Finder · Scores are synthesised estimates based on the data sources listed in Methodology · Regions follow <a href="https://meta.wikimedia.org/wiki/Grants:Regions" target="_blank" style="color:var(--blue)">Organization Grants Regions</a> · For a 200-person international conference
   </footer>
-</div>
 
 <script>
 const LAST_UPDATED = "June 2026";
 const CHANGELOG = [
   {
     date: "June 2026",
+    title: "Reference library expanded — 8 new sources added",
+    body: "Added Freedom House Freedom in the World, ACLED Armed Conflict Location & Event Data, CIVICUS Monitor, World Justice Project Rule of Law Index, Bertelsmann Transformation Index, Reporters Without Borders Press Freedom Index, Amnesty International, and OSAC Crime & Safety Reports. These strengthen sourcing for Safety and Inclusivity criteria. Inclusivity criterion relabelled to remove specific group callout. All 'Wikimedia' region references updated to 'Organization'."
+  },
+  {
+    date: "June 2026",
     title: "Initial release — 66 cities, 66 countries",
-    body: "Dashboard launched with 66 cities across all 8 Organization Grants regions. Scores based on synthesised data from Global Peace Index, ILGA World, Henley Passport Index, Numbeo, and OAG. Criteria: safety, visa ease, inclusivity (LGBT + African nationals), affordability, and flight connectivity."
+    body: "Dashboard launched with 66 cities across all 8 Organization Grants regions. Scores based on synthesised data from Global Peace Index, ILGA World, Henley Passport Index, Numbeo, and OAG. Criteria: safety, visa ease, inclusivity, affordability, and flight connectivity."
   }
 ];
 
@@ -494,6 +639,17 @@ function toggleSection(id) {
   const el = document.getElementById(id);
   el.style.display = el.style.display === 'none' ? '' : 'none';
 }
+
+function switchTab(tab) {
+  document.getElementById('page-locations').style.display = tab === 'locations' ? '' : 'none';
+  document.getElementById('page-methodology').style.display = tab === 'methodology' ? '' : 'none';
+  document.getElementById('tab-locations').classList.toggle('active', tab === 'locations');
+  document.getElementById('tab-methodology').classList.toggle('active', tab === 'methodology');
+  window.location.hash = tab;
+}
+
+// Restore tab from URL hash
+if(window.location.hash === '#methodology') switchTab('methodology');
 
 function render() {
   const arr = getFiltered();
